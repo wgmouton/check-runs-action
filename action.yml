@@ -11,6 +11,9 @@ inputs:
   id:
     description: 'the step ID related to this check'
     required: false
+  sha:
+    description: 'sha to which this check should be assigned'
+    required: false
   checks:
     description: 'the checks you want to manage'
     required: false
