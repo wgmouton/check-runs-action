@@ -83,6 +83,7 @@ export const parseInputs = (getInput: GetInput): Input => {
     ? JSON.parse(process.env[envVariableName] as string)
     : {collections: []}
 
+  const sha = getInput('sha', {required: false})
   const collectionFromInput = getInput('collection')
   const collection = collectionFromInput || 'default'
 
@@ -219,6 +220,7 @@ export const parseInputs = (getInput: GetInput): Input => {
     globalContext,
     runContext: {
       token,
+      sha,
       collectedCheckRuns,
       fail,
     },

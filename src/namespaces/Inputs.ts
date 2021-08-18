@@ -11,6 +11,7 @@ export interface GlobalContext {
 
 export interface RunContext {
   token: string
+  sha: string
   collectedCheckRuns: CollectedCheckRun[]
   fail: boolean
 }

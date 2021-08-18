@@ -9,16 +9,15 @@ export const envVariableName = 'DFLYDEV_CHECK_RUN_COLLECTIONS'
 
 async function run(): Promise<void> {
   try {
-    core.debug(
-      `GITHUB_SHA: ${process.env['GITHUB_SHA']} (${github.context.sha} from context)`,
-    )
-
     core.debug(`GITHUB_EVENT_PATH: ${process.env['GITHUB_EVENT_PATH']}`)
 
     core.debug(`Parsing inputs`)
     const inputs = parseInputs(core.getInput)
 
     core.debug(JSON.stringify(inputs))
+
+    const sha = core.getInput('sha') || github.context.sha
+    core.debug(`GITHUB_SHA: ${sha}`)
 
     core.debug(`Setting up OctoKit`)
     const octokit = new github.GitHub(inputs.runContext.token)
@@ -28,15 +27,13 @@ async function run(): Promise<void> {
       repo: github.context.repo.repo,
     }
 
-    const sha = github.context.sha
-
     core.debug(JSON.stringify(ownership))
 
     for (const collectedCheckRun of inputs.runContext.collectedCheckRuns) {
       const collection = collectedCheckRun.collection
       const checkRun = collectedCheckRun.checkRun
 
-      if (checkRun.gitHubCheckRunId) {
+      if (checkRun.gitHubCheckRunId) {``
         core.debug(`Updating a Run (${checkRun.gitHubCheckRunId})`)
 
         updateRun(octokit, checkRun.gitHubCheckRunId, ownership, checkRun)
