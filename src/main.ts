@@ -33,7 +33,8 @@ async function run(): Promise<void> {
       const collection = collectedCheckRun.collection
       const checkRun = collectedCheckRun.checkRun
 
-      if (checkRun.gitHubCheckRunId) {``
+      if (checkRun.gitHubCheckRunId) {
+        ;``
         core.debug(`Updating a Run (${checkRun.gitHubCheckRunId})`)
 
         updateRun(octokit, checkRun.gitHubCheckRunId, ownership, checkRun)

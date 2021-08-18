@@ -3643,23 +3643,24 @@ exports.envVariableName = 'DFLYDEV_CHECK_RUN_COLLECTIONS';
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            core.debug(`GITHUB_SHA: ${process.env['GITHUB_SHA']} (${github.context.sha} from context)`);
             core.debug(`GITHUB_EVENT_PATH: ${process.env['GITHUB_EVENT_PATH']}`);
             core.debug(`Parsing inputs`);
             const inputs = inputs_1.parseInputs(core.getInput);
             core.debug(JSON.stringify(inputs));
+            const sha = core.getInput('sha') || github.context.sha;
+            core.debug(`GITHUB_SHA: ${sha}`);
             core.debug(`Setting up OctoKit`);
             const octokit = new github.GitHub(inputs.runContext.token);
             const ownership = {
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
             };
-            const sha = github.context.sha;
             core.debug(JSON.stringify(ownership));
             for (const collectedCheckRun of inputs.runContext.collectedCheckRuns) {
                 const collection = collectedCheckRun.collection;
                 const checkRun = collectedCheckRun.checkRun;
                 if (checkRun.gitHubCheckRunId) {
+                    ``;
                     core.debug(`Updating a Run (${checkRun.gitHubCheckRunId})`);
                     checks_1.updateRun(octokit, checkRun.gitHubCheckRunId, ownership, checkRun);
                 }
@@ -8658,6 +8659,7 @@ exports.parseInputs = (getInput) => {
     const globalContext = process.env[main_1.envVariableName]
         ? JSON.parse(process.env[main_1.envVariableName])
         : { collections: [] };
+    const sha = getInput('sha', { required: false });
     const collectionFromInput = getInput('collection');
     const collection = collectionFromInput || 'default';
     const token = getInput('token', { required: true });
@@ -8755,6 +8757,7 @@ exports.parseInputs = (getInput) => {
         globalContext,
         runContext: {
             token,
+            sha,
             collectedCheckRuns,
             fail,
         },
